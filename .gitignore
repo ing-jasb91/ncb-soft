@@ -26,7 +26,6 @@ wheels/
 MANIFEST
 
 # Of the project
-database
 .vscode
 settings.json
 DATA
