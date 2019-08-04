@@ -2,7 +2,8 @@ from query_def import create_connection, select_all_in_table, select_tables_by_r
 from encryptor import enpass
 from devices_def import switch
 from write_log import wlog
-from datetime import datetime
+from datetime import datetime, date, timedelta
+from diff_def import diff_file
 import time
 import os
 import pysftp
@@ -16,7 +17,12 @@ conn = create_connection(db_path)
 
 # Variable para la obviar la SSH Fingerping
 cnopts = pysftp.CnOpts()
-cnopts.hostkeys = None  
+cnopts.hostkeys = None
+
+today = date.today().strftime('%Y-%m-%d')
+yesterday = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
+
+
 
 # Credenciales para autenticar con los dispositivos;  indice de tupla : [0 = id, 1 = username, 2 = password encrypted]
 credentials = select_tables_by_row(conn, "credential", 2)
@@ -34,11 +40,14 @@ for data in device_data:
     # Entre corchetes está la variable de acuerdo al dispositivo.
     # Ruta local de directorio = localDirPath; Ruta local de archivos = localFilePath
     localDirPath = f'./DATA/{ data[1] }'
-    localFilePath = f'{ localDirPath }/{ datetime.now().strftime("%Y-%m-%d") }.txt'
+    localFilePath = f'{ localDirPath }/{ today }.txt'
+    yesterday_file = f'{ localDirPath }/{ yesterday }.txt'
+
     # Condicional if - else comprueba si existe el archivo de respaldo, de lo contrario finaliza la sentencia.
     if os.path.exists(localFilePath):
         # Variable wlog() escribe lo indicado en un archivo log
         wlog(f"{ datetime.now().strftime('%Y-%m-%d %H:%M:%S') }   Archivo de respaldo { data[1] } ya existe!")
+        wlog(diff_file(localFilePath, yesterday_file, data[1]))
     else:
         # Sentencias "try except else" manejan errores si se llegacen a presentar
         try:
@@ -66,9 +75,16 @@ for data in device_data:
             try:
                 sftp.get(remoteFilePath, localFilePath)
                 wlog(f"{ datetime.now().strftime('%Y-%m-%d %H:%M:%S') }   Respaldo del archivo conf en el dispositivo { data[1] } realizado exitosamente!")
+
             except:
                 wlog(f"{ datetime.now().strftime('%Y-%m-%d %H:%M:%S') }   Error en la conexión con el dispositivo { data[1] }. ¿Está habilitado SFTP en este equipo?")
-            sftp.close()
+            
+
+            # Comprobación interna para determinar si los archivos anterior y actual son los mismos o no.
+          
+            wlog(diff_file(localFilePath, yesterday_file, data[1]))
+     
+
 
 
 # Variable para el cálculo de la duración total de la ejecución del script.
