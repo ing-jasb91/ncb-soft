@@ -1,7 +1,15 @@
 import logging
+from os import path, makedirs
+
+logPath = './logs'
+
+if not path.exists(logPath):
+       makedirs(logPath)
+
+
 logging.basicConfig(format='%(asctime)-2s — %(levelname)-10s %(message)-2s',
                      datefmt='%Y-%m-%d %H:%M:%S', 
-                     level=logging.INFO, filename='./logs/main_log.txt')
+                     level=logging.INFO, filename=f'{ logPath }/main_log.txt')
 
 # 
 
