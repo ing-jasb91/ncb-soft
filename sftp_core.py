@@ -1,15 +1,22 @@
+################################################ NCB SOFT #########################################################
+# LICENSE MIT
+# Create by JASB91 [https://github.com/ing-jasb91]
+# Base on James Preston of The Queen's College, Oxford // Website: https://myworldofit.net/?p=9127
+# version 0.0.1 alpha 2019/08/05
+
+# Módulos y clases importadas.
 from query_def import create_connection, select_all_in_table, select_tables_by_row
 from encryptor import enpass
 from devices_def import switch
 from write_log import log_error, log_warning, log_info, log_debug
-from datetime import datetime, date, timedelta
 from diff_def import diffBackup
-import time
-import os
+from datetime import date, timedelta
+from time import time
+from os import path, makedirs
 import pysftp
 
 # Contador de inicio para el cálculo de la duración del script pysftp-core
-start_time = time.time()
+start_time = time()
 
 # Conectar la base de datos
 db_path = "database/system.db"
@@ -44,7 +51,7 @@ for data in device_data:
     yesterday_file = f'{ localDirPath }/{ yesterday }.txt'
 
     # Condicional if - else comprueba si existe el archivo de respaldo, de lo contrario finaliza la sentencia.
-    if os.path.exists(localFilePath):
+    if path.exists(localFilePath):
         # Variable wlog() escribe lo indicado en un archivo log
         log_warning(f"Archivo de respaldo { data[1] } ya existe!")
         diffBackup(localFilePath, yesterday_file, data[1])
@@ -54,12 +61,12 @@ for data in device_data:
             sftp = pysftp.Connection(host=data[2], username=credentials[1], password=pass_clear, cnopts=cnopts)
         except KeyboardInterrupt:
             log_warning(f"Script detenido inesperadamente por el usuario")
-            log_info(f"Tiempo de ejecución del script: { round( (time.time() - start_time), 2) } segundos.")
+            log_info(f"Tiempo de ejecución del script: { round( (time() - start_time), 2) } segundos.")
             quit()
         except:
             log_error(f"No es posible la conexión con { data[1] }. Más detalles:")
         else:
-            log_info(f"{ datetime.now().strftime('%Y-%m-%d %H:%M:%S') }   Intentando conectar { data[1] } ... ")
+            log_info(f"Intentando conectar { data[1] } ... ")
 
             # Define a que directorio remoto del equipo de red debes elegir para descargar
             # En el archivo devices_def.py se definen un diccionario que indica el tipo y el path.
@@ -69,15 +76,15 @@ for data in device_data:
         # or absolute "C:\Users\sdkca\Desktop\TUTORIAL.txt"
 
             # Comprueba si no existe el directorio local, si existe omite la línea que sigue
-            if not os.path.exists(localDirPath):
-                os.makedirs(localDirPath)
+            if not path.exists(localDirPath):
+                makedirs(localDirPath)
             # Captura el error en caso de ocurrir alguno, y escribe los mensajes en el log.
             try:
                 sftp.get(remoteFilePath, localFilePath)
                 log_info(f"Respaldo del archivo conf en el dispositivo { data[1] } realizado exitosamente!")
 
             except:
-                log_error(f"{ datetime.now().strftime('%Y-%m-%d %H:%M:%S') }   Error en la conexión con el dispositivo { data[1] }. ¿Está habilitado SFTP en este equipo?")
+                log_error(f"Error en la conexión con el dispositivo { data[1] }. ¿Está habilitado SFTP en este equipo?")
             
 
             # Comprobación interna para determinar si los archivos anterior y actual son los mismos o no.
@@ -88,7 +95,7 @@ for data in device_data:
 
 # Variable para el cálculo de la duración total de la ejecución del script.
 # El resultado es almacenado en el log.
-rtime = (time.time() - start_time)
+rtime = (time() - start_time)
 log_info(f"Tiempo de ejecución del script: { round(rtime, 2) } segundos.")
 
 # # connection closed automatically at the end of the with-block
