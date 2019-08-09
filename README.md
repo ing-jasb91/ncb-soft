@@ -14,7 +14,8 @@ This project consists in standardizing the process in the backup script for the 
   
   ## Installation procedure
 
-  Enter this link to download Python depending on your platform or Operating System:
+  Enter this link to download Python and your pip package manager
+  depending on your platform or Operating System:
 
   [Official Python Downloads](https://www.python.org/downloads/)
 
@@ -62,12 +63,16 @@ dated in format YYYY-MM-DD.txt
 
 Composed by the archives:
 
--encryptor.py
--genkey.py
+- encryptor.py
+- genkey.py
 
-Responsible for encrypting the password before being stored in the database table for greater security, and decrypts it only at the time of file transfer.
+Responsible for encrypting the password before being stored 
+in the database table for greater security, and decrypts it
+only at the time of file transfer.
 
-The second file is inside a folder called "generate_simkey", which is used to create the symmetric encryption key. You can use this generator to create a new key, but passwords must be changed.
+The second file is inside a folder called "generate_simkey", 
+which is used to create the symmetric encryption key.
+You can use this generator to create a new key, but passwords must be changed.
 
 ### 3.- Device Definition (devices_def.py)
 
