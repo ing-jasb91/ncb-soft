@@ -123,7 +123,7 @@ It generates a folder called "logs", where it stores the main_log.txt file
 ## Clone this repo
 
 ```
-https://github.com/ing-jasb91/ncb-soft.git
+git clone https://github.com/ing-jasb91/ncb-soft.git
 ```
 
 
