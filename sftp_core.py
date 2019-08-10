@@ -26,6 +26,7 @@ conn = create_connection(db_path)
 cnopts = pysftp.CnOpts()
 cnopts.hostkeys = None
 
+# Variables para definir el día actual y el anterior
 today = date.today().strftime('%Y-%m-%d')
 yesterday = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
 
