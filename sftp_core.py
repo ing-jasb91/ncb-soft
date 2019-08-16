@@ -82,7 +82,9 @@ for data in device_data:
             # Captura el error en caso de ocurrir alguno, y escribe los mensajes en el log.
             try:
                 sftp.get(remoteFilePath, localFilePath)
+                sftp.close()
                 log_info(f"Respaldo del archivo conf en el dispositivo { data[1] } realizado exitosamente!")
+
 
             except:
                 log_error(f"Error en la conexión con el dispositivo { data[1] }. ¿Está habilitado SFTP en este equipo?")
@@ -90,12 +92,14 @@ for data in device_data:
 
             # Comprobación interna para determinar si los archivos anterior y actual son los mismos o no.
             diffBackup(localFilePath, yesterday_file, data[1])
+            
      
 
 
 
 # Variable para el cálculo de la duración total de la ejecución del script.
 # El resultado es almacenado en el log.
+
 rtime = (time() - start_time)
 log_info(f"Tiempo de ejecución del script: { round(rtime, 2) } segundos.")
 
