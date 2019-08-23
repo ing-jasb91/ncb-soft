@@ -1,7 +1,7 @@
 import sqlite3
 
 # Conectar la base de datos
-conection = sqlite3.connect("database/system.db")
+conection = sqlite3.connect("database/schema.db")
 
 # Seleccionar el cursor para realizar la consulta
 query = conection.cursor()
