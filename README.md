@@ -48,7 +48,7 @@ https://www.sqlite.org/download.html
 ```
 ## Configuration files
 
-To understand the project file system I will divide it into X parts:
+To understand the project file system I will divide it into 5 parts:
 
 ### 1.- CORE SFTP (sftp_core.py)
 
