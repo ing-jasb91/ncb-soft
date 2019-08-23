@@ -21,7 +21,7 @@ except ValueError:
 passenc = passwrd(password)
 
 # Conectar la base de datos
-conection = sqlite3.connect("database/system.db")
+conection = sqlite3.connect("database/schema.db")
 
 # Seleccionar el cursor para realizar la consulta
 c = conection.cursor()
@@ -34,7 +34,7 @@ if c.fetchone()[0]==0 :
     """
     CREATE TABLE IF NOT EXISTS credential(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-    username TEXT NOT NULL,
+    username TEXT NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL);
     """
     )

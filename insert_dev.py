@@ -25,7 +25,7 @@ except ValueError:
 
 
 # Conectar la base de datos
-conection = sqlite3.connect("database/mysqlite.db")
+conection = sqlite3.connect("database/schema.db")
 
 # Seleccionar el cursor para realizar la consulta
 c = conection.cursor()
@@ -39,7 +39,7 @@ if c.fetchone()[0]==0 :
     CREATE TABLE IF NOT EXISTS device_data(
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     deviceName TEXT NOT NULL,
-    hostname TEXT NOT NULL,
+    hostname TEXT NOT NULL UNIQUE,
     deviceType int NOT NULL);
     """
     )
