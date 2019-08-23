@@ -2,7 +2,7 @@ import sqlite3
 
 
 # Introducción y validación de datos entrantes
-print("*** Script para insertar las credenciales de los equipos ***")
+print("*** Script para insertar la información de los equipos ***")
 
 name_dev = input("Introduzca el nombre del dispositivo: ")
 ip_dev = input("Introduzca la dirección IP del dispositivo: ")
@@ -25,10 +25,25 @@ except ValueError:
 
 
 # Conectar la base de datos
-conection = sqlite3.connect("database/system.db")
+conection = sqlite3.connect("database/mysqlite.db")
 
 # Seleccionar el cursor para realizar la consulta
-query = conection.cursor()
+c = conection.cursor()
+
+c.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='device_data' ''')
+
+if c.fetchone()[0]==0 :
+
+    c.execute(
+    """
+    CREATE TABLE IF NOT EXISTS device_data(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    deviceName TEXT NOT NULL,
+    hostname TEXT NOT NULL,
+    deviceType int NOT NULL);
+    """
+    )
+    print("Tabla <device_data> creada exitosamente!")
 
 # Valor de los argumentos
 arguments = (name_dev, ip_dev, type_dev)
@@ -40,13 +55,13 @@ VALUES (?, ?, ?);
 
 # Realizar la consulta
 # Ejecutar la consulta
-if (query.execute(sql, arguments)):
+if (c.execute(sql, arguments)):
     print("¡Registros guardados exitosamente!")
 else:
     print("¡Ocurrió un error con la inserción de datos!")
 
 # Terminamos la consulta
-query.close()
+c.close()
 
 # Guardamos los cambios
 conection.commit()

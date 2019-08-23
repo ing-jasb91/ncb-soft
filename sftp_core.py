@@ -12,14 +12,19 @@ from write_log import log_error, log_warning, log_info, log_debug
 from diff_def import diffBackup
 from datetime import date, timedelta
 from time import time
-from os import path, makedirs
+from os import path, makedirs, getcwd
 import pysftp
 
 # Contador de inicio para el cálculo de la duración del script pysftp-core
 start_time = time()
 
 # Conectar la base de datos
-db_path = "database/system.db"
+db_dir = path.abspath(getcwd()) + "/database"
+if not path.exists(db_dir):
+    makedirs(db_dir)
+
+db_path = db_dir + "/system.db"
+
 conn = create_connection(db_path)
 
 # Variable para la obviar la SSH Fingerping

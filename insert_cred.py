@@ -24,7 +24,21 @@ passenc = passwrd(password)
 conection = sqlite3.connect("database/system.db")
 
 # Seleccionar el cursor para realizar la consulta
-query = conection.cursor()
+c = conection.cursor()
+
+c.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='credential' ''')
+
+if c.fetchone()[0]==0 :
+
+    c.execute(
+    """
+    CREATE TABLE IF NOT EXISTS credential(
+    id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    username TEXT NOT NULL,
+    password VARCHAR(255) NOT NULL);
+    """
+    )
+    print("Tabla <credential> creada exitosamente!")
 
 # Valor de los argumentos
 arguments = (username, passenc)
@@ -36,13 +50,13 @@ VALUES (?, ?);
 
 # Realizar la consulta
 # Ejecutar la consulta
-if (query.execute(sql, arguments)):
+if (c.execute(sql, arguments)):
     print("¡Registros guardados exitosamente!")
 else:
     print("¡Ocurrió un error con la inserción de datos!")
 
 # Terminamos la consulta
-query.close()
+c.close()
 
 # Guardamos los cambios
 conection.commit()
