@@ -38,7 +38,7 @@ yesterday = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
 
 
 # Credenciales para autenticar con los dispositivos;  indice de tupla : [0 = id, 1 = username, 2 = password encrypted]
-credentials = select_tables_by_row(conn, "credential", 2)
+credentials = select_tables_by_row(conn, "credential")
 
 # Descifrador de password!
 pass_clear = enpass(credentials[2])

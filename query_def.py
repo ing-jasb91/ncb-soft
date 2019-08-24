@@ -29,7 +29,7 @@ def select_all_in_table(conn, table):
     return cur.fetchall()
  
 # Función para la consulta del registro específico en la tabla "específica" de acuerdo a un nombre específico.
-def select_tables_by_row(conn, table, id):
+def select_tables_by_row(conn, table, id=2):
     """
     Query specific table and  name \n
     :param conn: the Connection object. \n
