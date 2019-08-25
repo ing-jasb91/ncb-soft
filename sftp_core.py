@@ -14,18 +14,12 @@ from datetime import date, timedelta
 from time import time
 from os import path, makedirs, getcwd
 import pysftp
-
+import paramiko
 # Contador de inicio para el cálculo de la duración del script pysftp-core
 start_time = time()
 
 # Conectar la base de datos
-db_dir = path.abspath(getcwd()) + "/database"
-if not path.exists(db_dir):
-    makedirs(db_dir)
-
-db_path = db_dir + "/system.db"
-
-conn = create_connection(db_path)
+conn = create_connection()
 
 # Variable para la obviar la SSH Fingerping
 cnopts = pysftp.CnOpts()
@@ -38,6 +32,9 @@ yesterday = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
 
 
 # Credenciales para autenticar con los dispositivos;  indice de tupla : [0 = id, 1 = username, 2 = password encrypted]
+# Como argumento de la función "select_tables_by_row" 
+# tenemos la conexión con la base de datos, la tabla de la base de datos, el id (default = 1)
+# y la columna username (default = "transfer") 
 credentials = select_tables_by_row(conn, "credential")
 
 # Descifrador de password!
@@ -69,10 +66,12 @@ for data in device_data:
             log_warning(f"Script detenido inesperadamente por el usuario")
             log_info(f"Tiempo de ejecución del script: { round( (time() - start_time), 2) } segundos.")
             quit()
+        except paramiko.ssh_exception.AuthenticationException :
+            log_warning("Autenticación fallida: revise las contraseñas en la base de datos!")
         except:
             log_error(f"No es posible la conexión con { data[1] }. Más detalles:")
         else:
-            log_info(f"Intentando conectar { data[1] } ... ")
+            log_info(f"Intentando conectar con { data[1] } ... ")
 
             # Define a que directorio remoto del equipo de red debes elegir para descargar
             # En el archivo devices_def.py se definen un diccionario que indica el tipo y el path.
@@ -97,10 +96,6 @@ for data in device_data:
 
             # Comprobación interna para determinar si los archivos anterior y actual son los mismos o no.
             diffBackup(localFilePath, yesterday_file, data[1])
-            
-     
-
-
 
 # Variable para el cálculo de la duración total de la ejecución del script.
 # El resultado es almacenado en el log.

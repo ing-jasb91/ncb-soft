@@ -1,4 +1,11 @@
 import sqlite3
+import os
+
+db_dir = os.path.abspath(os.getcwd()) + "/database"
+print(db_dir)
+if not os.path.exists(db_dir):
+    os.makedirs(db_dir)
+
 
 
 # Introducción y validación de datos entrantes
@@ -25,7 +32,7 @@ except ValueError:
 
 
 # Conectar la base de datos
-conection = sqlite3.connect("database/schema.db")
+conection = sqlite3.connect(db_dir + "/schema.db")
 
 # Seleccionar el cursor para realizar la consulta
 c = conection.cursor()

@@ -2,7 +2,7 @@ import sqlite3
 from sqlite3 import Error
  
 # Función para la conexión con la base de datos SQLite 
-def create_connection(db_file):
+def create_connection(db_file = "database/schema.db"):
     """ create a database connection to the SQLite database
         specified by the db_file
     :param db_file: database file
@@ -29,7 +29,7 @@ def select_all_in_table(conn, table):
     return cur.fetchall()
  
 # Función para la consulta del registro específico en la tabla "específica" de acuerdo a un nombre específico.
-def select_tables_by_row(conn, table, id=2):
+def select_tables_by_row(conn, table, username = "transfer"):
     """
     Query specific table and  name \n
     :param conn: the Connection object. \n
@@ -37,7 +37,7 @@ def select_tables_by_row(conn, table, id=2):
     :param name: id of credential. \n
     """
     cur = conn.cursor()
-    cur.execute(f"SELECT * FROM { table } WHERE id=?;", (id,))
+    cur.execute(f"SELECT * FROM { table } WHERE username = ?;", (username, ))
  
     rows = cur.fetchall()
  

@@ -17,7 +17,7 @@ logging.basicConfig(format=u'%(asctime)-2s — %(levelname)-10s %(message)-2s',
                      level=logging.INFO,
                      handlers=[
                             logging.FileHandler(f'{ logPath }/main.log', 'a', 'utf-8'),
-                            SysLogHandler(address = ('10.0.50.20',514))
+                            #SysLogHandler(address = ('10.0.50.20',514))
                             ]
                      
                      )
