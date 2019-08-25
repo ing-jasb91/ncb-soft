@@ -22,9 +22,9 @@ start_time = time()
 conn = create_connection()
 
 # Variable para la obviar la SSH Fingerping
-cnopts = pysftp.CnOpts()
-cnopts.hostkeys = None
-
+# cnopts = pysftp.CnOpts()
+# cnopts.hostkeys = None
+# print(cnopts)
 # Variables para definir el día actual y el anterior
 today = date.today().strftime('%Y-%m-%d')
 yesterday = (date.today() - timedelta(days=1)).strftime('%Y-%m-%d')
@@ -61,13 +61,16 @@ for data in device_data:
     else:
         # Sentencias "try except else" manejan errores si se llegacen a presentar
         try:
+            cnopts = pysftp.CnOpts()
+            cnopts.hostkeys = None
             sftp = pysftp.Connection(host=data[2], username=credentials[1], password=pass_clear, cnopts=cnopts)
+            print(cnopts)
         except KeyboardInterrupt:
             log_warning(f"Script detenido inesperadamente por el usuario")
             log_info(f"Tiempo de ejecución del script: { round( (time() - start_time), 2) } segundos.")
             quit()
         except paramiko.ssh_exception.AuthenticationException :
-            log_warning("Autenticación fallida: revise las contraseñas en la base de datos!")
+            log_error(f"Autenticación fallida en { data[1] }: Más detalles:")
         except:
             log_error(f"No es posible la conexión con { data[1] }. Más detalles:")
         else:
