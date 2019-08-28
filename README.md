@@ -115,7 +115,7 @@ Composed by the archives:
 This module records the events generated in the execution of the central module.
 
 It also contains a diff file to define the variables to differentiate between files
-from the previous day and those that are backed up to the day.
+from the previous day and those that are backed up to the You can now enter the different data of the network devices in the "insert_dev.py" scriptday.
 
 It generates a folder called "logs", where it stores the main_log.txt file
 
@@ -125,5 +125,13 @@ It generates a folder called "logs", where it stores the main_log.txt file
 ```
 git clone https://github.com/ing-jasb91/ncb-soft.git
 ```
+
+## Running Python files
+
+A.- Run the "insert_cred.py" and "insert_dev.py" files to enter credential values and network device information.
+B.- Once you run the above files, run the file "sftp_core.py" to test the functionality of the script.
+C.- You can now enter the different data of the network devices in the "insert_dev.py" script
+
+
 
 
