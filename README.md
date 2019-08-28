@@ -2,6 +2,8 @@
 
 This project consists in standardizing the process in the backup script for the configuration files of the network devices, using common protocols (SSH, FTP, SFTP, etc.) on the network devices.  It is expected to continue developing these codes from the first moment this repository is created.
 
+This project is based on the backup script, thanks to James Preston of The Queen's College, Oxford.
+
 
   ## Installation Requirements
 
