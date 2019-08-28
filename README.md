@@ -128,9 +128,9 @@ git clone https://github.com/ing-jasb91/ncb-soft.git
 
 ## Running Python files
 
-A.- Run the "insert_cred.py" and "insert_dev.py" files to enter credential values and network device information.
-B.- Once you run the above files, run the file "sftp_core.py" to test the functionality of the script.
-C.- You can now enter the different data of the network devices in the "insert_dev.py" script
+- Run the "insert_cred.py" and "insert_dev.py" files to enter credential values and network device information.
+- Once you run the above files, run the file "sftp_core.py" to test the functionality of the script.
+- You can now enter the different data of the network devices in the "insert_dev.py" script
 
 
 
