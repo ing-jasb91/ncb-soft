@@ -16,7 +16,7 @@ def diffBackup(yesterday, today, devices):
     elif(cmp(yesterday, today) == True):
         return log_debug(f"Los archivos respaldados en { devices } son idénticos!")
     else:
-        return log_info(f"Los archivos respaldados en { devices } son distintos!")
+        return log_warning(f"Los archivos respaldados en { devices } son distintos!")
     clear_cache()
     
         
