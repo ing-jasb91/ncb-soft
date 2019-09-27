@@ -2,6 +2,8 @@
 
 This project consists in standardizing the process in the backup script for the configuration files of the network devices, using common protocols (SSH, FTP, SFTP, etc.) on the network devices.  It is expected to continue developing these codes from the first moment this repository is created.
 
+This project is based on the backup script, thanks to James Preston of The Queen's College, Oxford.
+
 
   ## Installation Requirements
 
@@ -115,7 +117,7 @@ Composed by the archives:
 This module records the events generated in the execution of the central module.
 
 It also contains a diff file to define the variables to differentiate between files
-from the previous day and those that are backed up to the day.
+from the previous day and those that are backed up to the You can now enter the different data of the network devices in the "insert_dev.py" scriptday.
 
 It generates a folder called "logs", where it stores the main_log.txt file
 
@@ -125,5 +127,13 @@ It generates a folder called "logs", where it stores the main_log.txt file
 ```
 git clone https://github.com/ing-jasb91/ncb-soft.git
 ```
+
+## Running Python files
+
+- Run the "insert_cred.py" and "insert_dev.py" files to enter credential values and network device information.
+- Once you run the above files, run the file "sftp_core.py" to test the functionality of the script.
+- You can now enter the different data of the network devices in the "insert_dev.py" script
+
+
 
 
