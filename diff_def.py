@@ -11,8 +11,8 @@ def diffBackup(yesterday, today, devices):
     :param today: File current backup \n
 
     """
-    
-    if path.exists(yesterday) and path.exists(today) == False :
+
+    if path.exists(yesterday) and not path.exists(today) :
         return log_warning(f"Existe un problema con el actual y/o el anterior archivo de respaldo en { devices }")
     
     elif cmp(yesterday, today) :
