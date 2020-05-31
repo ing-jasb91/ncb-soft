@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-db_dir = os.path.abspath(os.getcwd()) + "/database"
+db_dir = os.getcwd() + "/database"
 print(db_dir)
 if not os.path.exists(db_dir):
     os.makedirs(db_dir)
@@ -14,6 +14,7 @@ print("*** Script para insertar la información de los equipos ***")
 name_dev = input("Introduzca el nombre del dispositivo: ")
 ip_dev = input("Introduzca la dirección IP del dispositivo: ")
 type_dev = input("Introduzca código del dispositivo: ")
+sshPort = input("Introduzca el puerto ssh del dispositivo: ")
 
 try: name_dev = str(name_dev)
 except ValueError:

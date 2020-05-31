@@ -1,40 +1,61 @@
 import sqlite3
+import re
 from encryptor import passwrd
-import os
-import getpass
-import write_log
+from os import path, getcwd, makedirs
+from getpass import getpass
 from write_log import log_error, log_warning, log_info, log_debug
 
-db_dir = os.path.abspath(os.getcwd()) + "/database"
+# Directorio donde se resguarda la base de datos sqlite
+db_dir = getcwd() + "/database"
 print(db_dir)
-if not os.path.exists(db_dir):
-    os.makedirs(db_dir)
-    log_info("Se creó directorio para guardar la base de datos!")
 
+if not path.exists(db_dir):
+    makedirs(db_dir)
+    log_info(f"Se creó directorio para guardar la base de datos en { db_dir }")
 
 # Introducción y validación de datos entrantes
 print("*** Script para insertar las credenciales de los equipos ***")
 
 username = input("Introduzca el nombre del usuario: ")
-password = getpass.getpass("Introduzca la contraseña: ")
+i = 0
+while bool(re.search(r'^\s*[0-9]',username)) or username == "" or bool(re.search(r'^\s+$', username)):
+    print('Nombre de usuario', '"' + username + '"', 'no es válido.\nIntente nuevamente')
+    username = input("Introduzca nuevamente nombre del usuario: ")
+    i += 1
+    if i == 2 :
+        print("Más de tres intentos seguidos...")
+        print("El programa se cerrará!")
+        exit()
 
-try: username = str(username)
-except ValueError:
-    print(username, "¡Dato inválido!")
-    exit()
+    
+# password = getpass("Introduzca la contraseña: ")
+# try: password = str(password)
+# except ValueError:
+#     print(password, "¡Dato inválido!")
+#     exit()
+print('''
+Recuerde que la contraseña debe tener al menos 8 caracteres,
+al menos una mayúscula, una minúscula, y uno de estos signos #?!@$%^&*-
+''')
+password = getpass("Introduzca la contraseña: ")
+# "^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+while not bool(re.search(r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$" , password)):
+    print('La contraseña no es válida.\nIntente nuevamente')
+    password = getpass("Introduzca nuevamente la contraseña: ")
+    i += 1
+    if i == 2 :
+        print("Más de tres intentos seguidos...")
+        print("El programa se cerrará!")
+        exit()
 
-try: password = str(password)
-except ValueError:
-    print(password, "¡Dato inválido!")
-    exit()
 
 passenc = passwrd(password)
 
 # Conectar la base de datos
-conection = sqlite3.connect(db_dir + "/schema.db")
+connection = sqlite3.connect(db_dir + "/schema.db")
 
 # Seleccionar el cursor para realizar la consulta
-c = conection.cursor()
+c = connection.cursor()
 
 c.execute(''' SELECT count(name) FROM sqlite_master WHERE type='table' AND name='credential' ''')
 
@@ -75,8 +96,8 @@ except sqlite3.IntegrityError :
 c.close()
 
 # Guardamos los cambios
-conection.commit()
+connection.commit()
 
 # Cerramos la conexión
-conection.close()
+connection.close()
 
