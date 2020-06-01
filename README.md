@@ -4,6 +4,11 @@ This project consists in standardizing the process in the backup script for the 
 
 This project is based on the backup script, thanks to James Preston of The Queen's College, Oxford.
 
+  ## Update 0.0.2
+  - Set Port SSH now available
+  - Cleaning code
+  - Script schema of sqlite
+
 
   ## Installation Requirements
 
