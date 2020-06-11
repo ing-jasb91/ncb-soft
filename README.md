@@ -4,55 +4,60 @@ This project consists in standardizing the process in the backup script for the 
 
 This project is based on the backup script, thanks to James Preston of The Queen's College, Oxford.
 
-  ## Update 0.0.2
-  - Set Port SSH now available
+## Update 0.0.2
+
+- Set Port SSH now available
   - Cleaning code
   - Script schema of sqlite
 
+## Installation Requirements
 
-  ## Installation Requirements
-
-  - Python 3.7.4 or lastests
+- Python 3.7.4 or lastests
   - pip 19.2.1
   - Librarys:
     - Cryptography 2.7 (Not tested in other versions)
     - pysftp 0.2.9 (Not tested in other versions)
   - sqlite3 3.29.0 or lastests
   
-  ## Installation procedure
+## Installation procedure
 
   Enter this link to download Python and your pip package manager
   depending on your platform or Operating System:
 
   [Official Python Downloads](https://www.python.org/downloads/)
 
-
 I also recommend updating to the latest version of the pip package manager (optional). From any command console:
-```
+
+```python
 python -m pip install --upgrade pip
 ```
 
 To install the libraries run the following commands:
-```
+
+```pip
 pip install "cryptography==2.7"
 pip install "pysftp==0.2.9"
 ```
 
 Or create a requirements.txt file with the following lines:
-```
+
+```pip
 cryptography==2.7
 pysftp==0.2.9
 ```
 
 and execute the command:
-```
+
+```python
 pip install -r requirements.txt
 ```
 
 Install the sqlite3 minimalist database engine to store credentials and device data:
-```
+
+```url
 https://www.sqlite.org/download.html
 ```
+
 ## Configuration files
 
 To understand the project file system I will divide it into 5 parts:
@@ -61,10 +66,9 @@ To understand the project file system I will divide it into 5 parts:
 
 This file is the central code of the app for backing up SFTP-enabled network devices.
 
-It generates a folder called "DATA", where it stores within other directories 
+It generates a folder called "DATA", where it stores within other directories
 with the hostname of the devices, and within these are the backup files
 dated in format YYYY-MM-DD.txt
-
 
 ### 2.- Encryption Security
 
@@ -73,21 +77,20 @@ Composed by the archives:
 - encryptor.py
 - genkey.py
 
-Responsible for encrypting the password before being stored 
+Responsible for encrypting the password before being stored
 in the database table for greater security, and decrypts it
 only at the time of file transfer.
 
-The second file is inside a folder called "generate_simkey", 
+The second file is inside a folder called "generate_simkey",
 which is used to create the symmetric encryption key.
 You can use this generator to create a new key, but passwords must be changed.
 
 ### 3.- Device Definition (devices_def.py)
 
-
-
 This file defines the file system path of the devices.
 Commonly almost all devices use Unix file systems, so you can present the format:
-```
+
+```dir
 /folder1/folder2/file_to_backup.bak
 ```
 
@@ -95,8 +98,7 @@ A dictionary was also created to emulate a switch-case structure within the Pyth
 In each case, the file systems of the routes of the network devices are defined.
 At the moment only the integers 0 (for Hp Switches) and 1 for Allied Telesis devices are defined.
 
-
-### 4.- Information base 
+### 4.- Information base
 
 Composed by the archives:
 
@@ -118,7 +120,6 @@ Composed by the archives:
 - write_log.py
 - diff_def.py
 
-
 This module records the events generated in the execution of the central module.
 
 It also contains a diff file to define the variables to differentiate between files
@@ -126,10 +127,9 @@ from the previous day and those that are backed up to the You can now enter the 
 
 It generates a folder called "logs", where it stores the main_log.txt file
 
-
 ## Clone this repo
 
-```
+```git
 git clone https://github.com/ing-jasb91/ncb-soft.git
 ```
 
@@ -138,7 +138,3 @@ git clone https://github.com/ing-jasb91/ncb-soft.git
 - Run the "insert_cred.py" and "insert_dev.py" files to enter credential values and network device information.
 - Once you run the above files, run the file "sftp_core.py" to test the functionality of the script.
 - You can now enter the different data of the network devices in the "insert_dev.py" script
-
-
-
-
