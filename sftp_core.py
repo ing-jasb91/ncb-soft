@@ -2,12 +2,11 @@
 # LICENSE MIT
 # Create by JASB91 [https://github.com/ing-jasb91]
 # Base on James Preston of The Queen's College, Oxford // Website: https://myworldofit.net/?p=9127
-# version 0.0.2 alpha 2020/05/30
+# version 0.1.0 alpha 2020/06/13
 
 # Módulos y clases importadas.
 from query_def import create_connection, select_all_in_table, select_tables_by_row
 # Recomendable reemplazar por bcrypt
-from encryptor import enpass
 from devices_def import switch
 from write_log import log_error, log_warning, log_info, log_debug
 from diff_def import diffBackup
