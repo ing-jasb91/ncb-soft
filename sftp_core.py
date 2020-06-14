@@ -15,6 +15,7 @@ from time import time
 from os import path, makedirs, getcwd
 import pysftp
 import paramiko
+
 # Contador de inicio para el cálculo de la duración del script pysftp-core
 start_time = time()
 
