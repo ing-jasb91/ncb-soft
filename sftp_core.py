@@ -70,12 +70,7 @@ for data in device_data:
                 sftp = pysftp.Connection(host=data[2], username=credentials[1], password=pass_clear, cnopts=cnopts)
             else :
                 sftp = pysftp.Connection(host=data[2], username=credentials[1], password=pass_clear, port = int(data[4]), cnopts=cnopts)
-        #print(cnopts)
-        # Se remueve este código ya que un script de ejecución automática normalmente no es detenido por el usuario
-        # except KeyboardInterrupt:
-        #     log_warning(f"Script detenido inesperadamente por el usuario")
-        #     log_info(f"Tiempo de ejecución del script: { round( (time() - start_time), 2) } segundos.")
-        #     quit()
+
         except paramiko.ssh_exception.AuthenticationException as e:
             log_error(f"Autenticación fallida en { data[1] }: Más detalles: {e}")
         except:

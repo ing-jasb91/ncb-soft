@@ -1,14 +1,9 @@
-import sys
-sys.path.append('/home/jasb/python/src/ncb-soft/src/logger')
-
 import sqlite3
 from sqlite3 import Error as sqliteError
 
-from logger import Logger
+import logger
 
-logError = Logger('src/logger/.cfg/logging.cfg')
-# Redundancia
-logError1 = Logger('src/logger/.cfg/error.cfg')
+logs = logger.Logger('src/config/logging.ini')
 
 # Función para la conexión con la base de datos SQLite 
 
@@ -33,10 +28,9 @@ class Databases :
         try :
             return sqlite3.connect(self.dbfilepath)
         except sqliteError as OE :
-            logError.log_error("Existe un error con la conexión con la base de datos:\n\t", OE)
-            logError1.log_error("Existe un error con la conexión con la base de datos:\n\t", OE)
-            
-        return None
+            logs.log_error(f"Existe un error con la conexión con la base de datos:\n\t{ OE }")
+                        
+            return None
 
     def cursorDB(self) :
         """
@@ -50,8 +44,7 @@ class Databases :
             return conn.cursor()
             
         except sqliteError as e :
-            logError.log_error(f"Existe un error haciendo un cursor con la base de datos:", e)
-            logError1.log_error(f"Existe un error haciendo un cursor con la base de datos:", e)
+            logs.log_error(f"Existe un error haciendo un cursor con la base de datos: { e }")
             
         return None
 
@@ -67,11 +60,10 @@ class Databases :
         try :
             cExec = cursor.execute(query)
         except sqliteError as OE :
-            logError.log_error('Error en la base de datos:')
-            logError.log_error(OE)
-            logError1.log_error('Error en la base de datos:')
-            logError1.log_error(OE)
+            logs.log_error('Error en la base de datos:')
+            logs.log_error(OE)
             return None
+        logs.log_info("Ejecutando consulta SQL!")
         return cExec
 
     def executeQueryScript(self, query) :
@@ -85,10 +77,8 @@ class Databases :
         try :
             cExec = cursor.executescript(query)
         except sqliteError as OE :
-            logError.log_error('Error en la base de datos: No existe la tabla:')
-            logError.log_error('\t', OE)
-            logError1.log_error('Error en la base de datos: No existe la tabla:')
-            logError1.log_error('\t', OE)
+            logs.log_error('Error en la base de datos: No existe la tabla:')
+            logs.log_error(f'\t{ OE }')
             return None
         return cExec
 
@@ -104,11 +94,8 @@ class Databases :
                 cSchemas.close()
                 
         except FileNotFoundError as FileError :
-            logError.log_error(f"Ocurrió un error leyendo el script:")
-            logError.log_error(FileError)
-            logError1.log_error(f"Ocurrió un error leyendo el script:")
-            logError1.log_error(FileError)
-
+            logs.log_error(f"Ocurrió un error leyendo el script:")
+            logs.log_error(FileError)
 
     def simpleQueries(self, table, column = '*', where = None) :
         """
@@ -137,20 +124,20 @@ class Databases :
 
 def main():
     ncbQualcom = Databases(
-        dbfilepath = 'database/test1.db'
+        dbfilepath = 'database/test.db'
         
         
     )
 
-    ncbQualcom.createSchemas('src/queries/script.sql')
+    # ncbQualcom.createSchemas('src/queries/script.sql')
 
-    rows = ncbQualcom.simpleQueries(
+    _ = ncbQualcom.simpleQueries(
         table = 'devices',
         column = 'deviceType, deviceName, hostname, port'
     )
 
-    for row in rows :
-        print(row)
+    # for row in rows :
+    #     print(row)
     
 
 if __name__ == '__main__':
