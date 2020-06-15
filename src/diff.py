@@ -1,9 +1,9 @@
 import glob
 from filecmp import cmp, clear_cache
-from os import path
-import logger
+from os import path, remove
+from .logger import Logger
 
-logs = logger.Logger('src/config/logging.ini')
+logs = Logger('src/config/logging.ini')
 
 def diffBackup(directory, devices):
     """
@@ -28,14 +28,18 @@ def diffBackup(directory, devices):
     lastFile = listFiles[0]
     previousFile = listFiles[1]
 
-    print(lastFile, previousFile)
     if cmp(previousFile, lastFile) :
         # return log_debug(f"Los archivos respaldados en { devices } son idénticos!")
-        return logs.log_info(f"Los archivos respaldados en { devices } son idénticos!")
+        logs.log_info(f"Los archivos respaldados en { devices } son idénticos!")
+        remove(lastFile)
+        logs.log_info(f'No es necesario el respaldo de archivo de configuración de { devices }')
+
+
     
     else:
         # return log_warning(f"Los archivos respaldados en { devices } son distintos!")
-        return logs.log_warning(f"Los archivos respaldados en { devices } son distintos!")
+        logs.log_warning(f"Los archivos respaldados en { devices } son distintos!")
+        logs.log_info(f'Se realizó el respaldo de archivo de configuración de { devices }')
     
     # Limpia el cache filecmp
     clear_cache()

@@ -2,11 +2,14 @@ from paramiko import Transport, SFTPClient
 import time
 import errno
 
+from .logger import Logger
+
 ## Based in this model:
 ## https://medium.com/@thapa.parmeshwor/sftp-upload-and-download-using-python-paramiko-a594e81cbcd8
 
+logsMain = Logger('src/config/logging.ini')
 
-class getFileSftp :
+class GetFiles :
     _connection = None
 
     def __init__(self, host, port, username, password) :
@@ -27,27 +30,23 @@ class getFileSftp :
         transport.connect(username = username, password = password)
         cls._connection = SFTPClient.from_transport(transport)
 
-
-
     def fileExists(self, remotePath) :
         try :
-            print('Remote Path:', remotePath)
             self._connection.stat(remotePath)
+            logsMain.log_info(f'Recuperando respaldo de la ruta { remotePath }')
         except IOError as e :
             if e.errno == errno.ENOENT :
                 return False
             raise
         else :
             return True
-                
-            
 
     def backupFile(self, remotePath, localPath, retry = 5) :
         if self.fileExists(remotePath) or retry == 0 :
             self._connection.get(remotePath, localPath, callback=None)
 
         elif retry > 0 :
-            time.sleep(5)
+            time.sleep(1)
             retry -= 1
             self.backupFile(remotePath, localPath, retry = retry)
             
@@ -56,7 +55,7 @@ class getFileSftp :
         self._connection.close()
 
 def main() :
-    switchRRHH = getFileSftp('10.0.12.10', 22, 'anthony', 'Qualc0m3')
+    switchRRHH = GetFiles('10.0.12.10', 22, 'anthony', 'Qualc0m3')
 
     switchRRHH.backupFile('/cfg/startup-config', './DATA/example4.txt')
 

@@ -1,9 +1,9 @@
 import sqlite3
 from sqlite3 import Error as sqliteError
 
-import logger
+from .logger import Logger
 
-logs = logger.Logger('src/config/logging.ini')
+logs = Logger('src/config/logging.ini')
 
 # Función para la conexión con la base de datos SQLite 
 
@@ -63,7 +63,6 @@ class Databases :
             logs.log_error('Error en la base de datos:')
             logs.log_error(OE)
             return None
-        logs.log_info("Ejecutando consulta SQL!")
         return cExec
 
     def executeQueryScript(self, query) :
