@@ -5,7 +5,7 @@ class TypeDevice:
     def __init__(self, configPath) :
         self.configPath = configPath
 
-    def getPathDevices(self, deviceType, keyword) :
+    def getInfoDevices(self, deviceType, keyword) :
 
         config = configparser.ConfigParser()
 
@@ -19,7 +19,7 @@ class TypeDevice:
 def main() :
     qualcomDevices = TypeDevice('src/config/devices.ini')
 
-    qualcomDevices.getPathDevices('at_switches', 'path')
+    qualcomDevices.getInfoDevices('at_switches', 'path')
 
 if __name__ == '__main__' :
     main()

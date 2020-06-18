@@ -76,7 +76,7 @@ for data in listDevices :
 
         # Define a que directorio remoto del equipo de red a descargar
         # En el archivo devices.ini se definen atributos [] que indica según la marca y el path sftp.
-        remoteFilePath = typeDevices.getPathDevices(data[3], 'path')
+        remoteFilePath = typeDevices.getInfoDevices(data[3], 'path')
 
         # Comprueba si no existe el directorio local
         if not path.exists(localDirPath):
@@ -89,10 +89,14 @@ for data in listDevices :
         devicesNetworks.close()
 
         # Comprobación interna para determinar si los archivos anterior y actual son los mismos o no.
-        diffBackup(localDirPath + '/*', '*.txt', data[0])
+        comparableDevices = typeDevices.getInfoDevices(data[3], 'comparable')
+        if comparableDevices == 'yes' :
+            diffBackup(localDirPath + '/*', '*.txt', data[0])
+        elif comparableDevices == 'no' :
+            logsMain.log_info(f"Tiempo de ejecución del script: { round(rtime, 2) } segundos.")
 
 # Variable para el cálculo de la duración total de la ejecución del script.
 
 rtime = (time() - start_time)
-logsMain.log_info(f"Tiempo de ejecución del script: { round(rtime, 2) } segundos.")
+logsMain.log_info(f"El archivo { remoteFilePath } no se puede comparar. Debe estar estar escrito en binario o cifrado.")
 
