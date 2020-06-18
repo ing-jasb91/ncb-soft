@@ -30,9 +30,8 @@ MANIFEST
 settings.json
 DATA
 logs
-no_importants
-database
-*.db
+# database
+# *.db
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

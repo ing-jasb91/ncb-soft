@@ -20,7 +20,8 @@ class Logger :
         
     def log_error(self, msg) :
         logSev = self.logConfigFile()
-        logSev.error(msg)
+        #logSev.error(msg)
+        logSev.exception(msg)
 
     def log_warning(self, msg) :
         logSev = self.logConfigFile()
@@ -33,13 +34,4 @@ class Logger :
     def log_debug(self, msg):
         logSev = self.logConfigFile()
         logSev.debug(msg)
-    
-# logNCB = Logger('.cfg/logging.cfg')
-
-# logNCB.log_info('Different')
-
-# logError = Logger('.cfg/error.cfg')
-
-# logError.log_error('This is a message error')
-# logError.log_info('Try info on error')
 

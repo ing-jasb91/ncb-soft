@@ -1,4 +1,5 @@
 from paramiko import Transport, SFTPClient
+from paramiko import ssh_exception
 import time
 import errno
 
@@ -12,17 +13,26 @@ logsMain = Logger('src/config/logging.ini')
 class GetFiles :
     _connection = None
 
-    def __init__(self, host, port, username, password) :
+    def __init__(self, host, port, device, username, password) :
         self.host = host
         self.port = port
+        self.device = device
         self.username = username
         self.password = password
 
+        try :
+            self.create_connection(
+                self.host, self.port,
+                self.username, self.password
+                )
 
-        self.create_connection(
-            self.host, self.port,
-            self.username, self.password
-            )
+        except ssh_exception.AuthenticationException as e :
+            logsMain.log_error(f"Autenticación fallida en { self.device }: Más detalles: { e }")
+        except:
+            logsMain.log_error(f"No es posible la conexión con { self.device }. Más detalles:")
+        else:
+            logsMain.log_info(f"Intentando conectar con { self.device } ... ")
+
         
     @classmethod
     def create_connection(cls, host, port, username, password) :
@@ -41,21 +51,28 @@ class GetFiles :
         else :
             return True
 
-    def backupFile(self, remotePath, localPath, retry = 5) :
+    def backupFile(self, remotePath, localPath, retry = 3) :
+        
         if self.fileExists(remotePath) or retry == 0 :
-            self._connection.get(remotePath, localPath, callback=None)
-
+            try :
+                self._connection.get(remotePath, localPath, callback=None)
+                logsMain.log_info(f"Respaldo del archivo conf en el dispositivo { self.device } realizado exitosamente!")
+            except:
+                logsMain.log_error(f"Error en la conexión con el dispositivo { self.device }. ¿Está habilitado SFTP en este equipo?")
+                raise
         elif retry > 0 :
-            time.sleep(1)
+            time.sleep(3)
             retry -= 1
             self.backupFile(remotePath, localPath, retry = retry)
-            
 
     def close(self) :
-        self._connection.close()
+        if self._connection != None :
+            self._connection.close()
+        else :
+            logsMain.log_warning(f"Cierre de conexión sin efecto!")
 
 def main() :
-    switchRRHH = GetFiles('10.0.12.10', 22, 'anthony', 'Qualc0m3')
+    switchRRHH = GetFiles('10.0.12.10', 22, 'SW-RRHH', 'anthony', 'Qualc0m3')
 
     switchRRHH.backupFile('/cfg/startup-config', './DATA/example4.txt')
 
