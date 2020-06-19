@@ -59,7 +59,8 @@ for data in listDevices :
     # Localización de los directorios donde se resguardará el respaldo.
     localDirPath = f'./DATA/{ data[0] }'
     # Ruta local de directorio = localDirPath; Ruta local de archivos = localFilePath
-    localFilePath = f'{ localDirPath }/{ current }.txt'
+    extension = typeDevices.getInfoDevices(data[3], 'extension')
+    localFilePath = f'{ localDirPath }/{ current }{ extension }'
 
     # Condicional if - else comprueba si existe el archivo de respaldo, de lo contrario finaliza la sentencia.
     if path.exists(localFilePath):
@@ -77,6 +78,7 @@ for data in listDevices :
         # Define a que directorio remoto del equipo de red a descargar
         # En el archivo devices.ini se definen atributos [] que indica según la marca y el path sftp.
         remoteFilePath = typeDevices.getInfoDevices(data[3], 'path')
+        
 
         # Comprueba si no existe el directorio local
         if not path.exists(localDirPath):
@@ -91,12 +93,13 @@ for data in listDevices :
         # Comprobación interna para determinar si los archivos anterior y actual son los mismos o no.
         comparableDevices = typeDevices.getInfoDevices(data[3], 'comparable')
         if comparableDevices == 'yes' :
-            diffBackup(localDirPath + '/*', '*.txt', data[0])
+            diffBackup(localDirPath + '/*', '*', data[0])
         elif comparableDevices == 'no' :
-            logsMain.log_info(f"Tiempo de ejecución del script: { round(rtime, 2) } segundos.")
+            logsMain.log_info(f"El archivo { remoteFilePath } no se puede comparar. Debe estar estar escrito en binario o cifrado.")
 
 # Variable para el cálculo de la duración total de la ejecución del script.
 
 rtime = (time() - start_time)
-logsMain.log_info(f"El archivo { remoteFilePath } no se puede comparar. Debe estar estar escrito en binario o cifrado.")
+logsMain.log_info(f"Tiempo de ejecución del script: { round(rtime, 2) } segundos.")
+
 
