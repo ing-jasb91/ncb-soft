@@ -12,16 +12,16 @@ BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS main.credentials (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     username TEXT NOT NULL UNIQUE,
-    password VARCHAR(255) NOT NULL
+    password TEXT NOT NULL
 );
-INSERT OR IGNORE INTO credentials VALUES(1,'transfer','Qualc0m');
+INSERT OR IGNORE INTO credentials VALUES(1,'transfer','Qualc0mBackup');
 
 
 -- Tabla devices con los registro de los switches y/o otros dispositivos
 CREATE TABLE IF NOT EXISTS main.devices (
     id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     deviceName TEXT NOT NULL,
-    hostname TEXT NOT NULL UNIQUE,
+    hostname TEXT NOT NULL,
     deviceType int NOT NULL,
 	port TEXT
 );
@@ -40,5 +40,7 @@ INSERT OR IGNORE INTO devices VALUES(12,'SW-AG-CCS-EXT-LIB-01','10.0.12.71',1,'2
 INSERT OR IGNORE INTO devices VALUES(13,'SW-AG-CCS-EXT-LIB-02','10.0.12.72',1,'22','at_switches');
 INSERT OR IGNORE INTO devices VALUES(14,'SW-DT-CCS-EXT-PV1-01','10.0.12.74',1,'22','at_switches');
 INSERT OR IGNORE INTO devices VALUES(15,'SW-DT-CCS-EXT-PQC-01','10.0.12.75',1,'22','at_switches');
+INSERT OR IGNORE INTO devices VALUES(16,'RT-MIKROTIK-EXPORT-KK','10.0.12.171',2,'22','rt_mikrotik_ct');
+INSERT OR IGNORE INTO devices VALUES(17,'RT-MIKROTIK-BACKUP-KK','10.0.12.171',3,'22','rt_mikrotik_bin');
 
 COMMIT;

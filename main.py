@@ -15,7 +15,7 @@ from src.devices import TypeDevice
 # Externos built-in y de terceros
 from datetime import date, timedelta
 from time import time
-from os import path, makedirs
+from os import path, makedirs, remove
 
 # Contador de inicio para el cálculo de la duración del script ncb-soft
 start_time = time()
@@ -35,18 +35,11 @@ typeDevices = TypeDevice('src/config/devices.ini')
 # Variables para definir la fecha del archivo actual
 current = date.today().strftime('%Y-%m-%d')
 
-# Credenciales para autenticar con los dispositivos.
-# tenemos la conexión con la base de datos, la tabla de la base de datos, el id (default = 1)
-credentials = connDB.simpleQueries(
-    table = 'credentials',
-    column = 'username, password',
-    where = 'id = 1'
-)
+# Extraer de archivo devices.ini las credenciales para inicio de sesión
+username = typeDevices.getInfoDevices('credentials_aaa', 'username')
+password = typeDevices.getInfoDevices('credentials_aaa', 'password')
 
-# Puesto que la sentencia anterior devuelve una lista con un único elemento
-# Una tupla, se desgloza el elemento 0 para obtener los datos
-credentials = credentials[0]
-
+print(username, password)
 # Datos de los dispositivos
 listDevices  = connDB.simpleQueries(
     table = 'devices',
@@ -71,8 +64,8 @@ for data in listDevices :
             host = data[1],
             port = int(data[2]),
             device = data[0],
-            username = credentials[0],
-            password = credentials[1],
+            username = username,
+            password = password,
         )
 
         # Define a que directorio remoto del equipo de red a descargar
@@ -87,18 +80,24 @@ for data in listDevices :
         # Realiza el backup interno
         devicesNetworks.backupFile(remoteFilePath, localFilePath, retry = 1)
 
+        # Comprobación interna para determinar si los archivos anterior y actual son los mismos o no.
+        comparableDevices = typeDevices.getInfoDevices(data[3], 'comparable')
+        if devicesNetworks.fileExists(remoteFilePath) :
+            if comparableDevices == 'yes' :
+                diffBackup(localDirPath + '/*', '*', data[0])
+            elif comparableDevices == 'no' :
+                logsMain.log_warning(f"El archivo { remoteFilePath } no se puede comparar. Debe estar estar escrito en binario o cifrado.")
+                logsMain.log_info(f'Se realizó el respaldo del archivo de configuración en { data[3] }.')
+            else :
+                logsMain.log_error(f"Paramétro \"{ comparableDevices }\" no permitido.")
+        else :
+            logsMain.log_error(f"No existe archivo remoto \"{ remoteFilePath }\" en { data[0] }, DirIP: { data[1] }.")
+            remove(localFilePath)
+
         # Cierra la conexión
         devicesNetworks.close()
 
-        # Comprobación interna para determinar si los archivos anterior y actual son los mismos o no.
-        comparableDevices = typeDevices.getInfoDevices(data[3], 'comparable')
-        if comparableDevices == 'yes' :
-            diffBackup(localDirPath + '/*', '*', data[0])
-        elif comparableDevices == 'no' :
-            logsMain.log_info(f"El archivo { remoteFilePath } no se puede comparar. Debe estar estar escrito en binario o cifrado.")
-
 # Variable para el cálculo de la duración total de la ejecución del script.
-
 rtime = (time() - start_time)
 logsMain.log_info(f"Tiempo de ejecución del script: { round(rtime, 2) } segundos.")
 
